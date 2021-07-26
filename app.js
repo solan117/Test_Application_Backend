@@ -22,22 +22,11 @@ mongoose.connect(db.url, {
 });
 
 app.get("/", (req, res) => {
-    res.json("Welcome to Dilwaree application.");
+    res.json("Welcome to Dilwari application.");
 });
 
-const customerProjection = {
-    _id: true,
-    FirstName: true,
-    LastName: true,
-    Address: true,
-    Phone: true,
-    City: true,
-    District: true,
-    Country: true,
-};
-
 app.get("/customerList", (req, res) =>
-    Customer.find({}, {}).then(function(customer) {
+    Customer.find({},  ).then(function(customer) {
         res.send(customer);
     })
 );
@@ -63,15 +52,15 @@ var json1 = {};
 var json2 = {};
 app.get("/movieList/:id", (req, res) =>
     Customer.find({ "Rentals.filmId": req.params.id }, { "First Name": true, "Last Name": true })
-    .then(function(movies) {
-        json1 = movies;
+    .then(function(customers) {
+        json1 = customers;
     })
     .then(
-        Movies.findById(req.params.id, {}).then(function(m) {
-            json2 = m;
+        Movies.findById(req.params.id, {}).then(function(movies) {
+            json2 = movies;
         })
     )
-    .then(res.send(JSON.stringify(json2) + JSON.stringify(json1)))
+    .then(res.send(json2 + json1))
 );
 
 app.listen(5000, function() {
