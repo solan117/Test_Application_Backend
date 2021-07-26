@@ -48,20 +48,15 @@ app.get("/movieList", (req, res) =>
         res.send(movie);
     })
 );
-var json1 = {};
-var json2 = {};
-app.get("/movieList/:id", (req, res) =>
-    Customer.find({ "Rentals.filmId": req.params.id }, { "First Name": true, "Last Name": true })
-    .then(function(customers) {
-        json1 = customers;
-    })
-    .then(
-        Movies.findById(req.params.id, {}).then(function(movies) {
-            json2 = movies;
-        })
-    )
-    .then(res.send(json2 + json1))
-);
+
+app.get("/movieList/:id", async (req, res) =>{
+    
+    var customers = await Customer.find({ "Rentals.filmId": req.params.id }, { "First Name": true, "Last Name": true })
+    var movies = await Movies.findById(req.params.id, {});
+
+    var final = {movies, 'customers': customers};
+    res.send(final);
+});
 
 app.listen(5000, function() {
     console.log("listening on 5000");
